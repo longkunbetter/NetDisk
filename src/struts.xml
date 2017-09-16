@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+
+
+	<package name="default" namespace="/" extends="struts-default, json-default">
+		<interceptors>
+			<interceptor name="UserInterceptor" class="com.lk.interceptor.UserInterceptor"></interceptor>
+			<interceptor name="SocialInterceptor" class="com.lk.interceptor.SocialInterceptor"></interceptor>
+		</interceptors>
+
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="success" type="dispatcher">/WEB-INF/user_center.jsp</result>
+			<result name="login" type="redirect">login.jsp</result>
+			<result name="error" type="dispatcher">/WEB-INF/err.jsp</result>
+			<result name="refuse" type="redirect">login.jsp</result>
+
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="UserInterceptor">
+				<param name="excludeMethods">login, register</param>
+			</interceptor-ref>
+		</action>
+		
+		<action name="social_*" class="socialAction" method="{1}">
+			<result name="json" type="json">
+				<param name="root">resultMap</param>
+			</result>
+			<result name="refuse" type="redirect" >login.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="SocialInterceptor">
+				<param name="includeMethods">praise, canclePraise, addComment</param>
+			</interceptor-ref>
+		</action>
+	</package>
+
+	<package name="fileop" namespace="/" extends="struts-default, json-default">
+		<interceptors>
+			<interceptor name="privilegeInterceptor"
+				class="com.lk.interceptor.PrivilegeInterceptor">
+			</interceptor>
+		</interceptors>
+
+		<action name="fileoperator" class="fileAction"
+			method="fileop">
+			<result name="json" type="json">
+				<param name="root">resultMap</param>
+			</result>
+			<result name="download" type="stream">
+				<param name="contentType">*</param>
+				<param name="contentDisposition">attachment;filename=${filename}</param>
+				<param name="bufferSize">1024</param>
+				<param name="inputName">downloadFile</param>
+			</result>
+			<result name="success" type="plainText">success</result>
+			<result name="refuse" type="redirect">refuse.jsp</result>
+			<result name="show_share">showShare.jsp</result>
+
+			<interceptor-ref name="privilegeInterceptor">
+				<param name="excludeMethods">fileop</param> 	
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+	</package>
+
+</struts>

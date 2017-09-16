@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="  
+            http://www.springframework.org/schema/context   
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd  
+            http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+            http://www.springframework.org/schema/mvc   
+            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd  
+            http://www.springframework.org/schema/aop   
+            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd  
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<bean id="userAction" class="com.lk.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="userService" class="com.lk.service.UserServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	
+	<bean id="userDao" class="com.lk.dao.UserDaoImpl"></bean>
+
+	<bean id="fileAction" class="com.lk.action.FileAction" scope="prototype">
+		<property name="fileDao" ref="fileDao"></property>
+		<property name="shareService" ref="shareService"></property>
+	</bean>
+	
+	<bean id="fileDao" class="com.lk.dao.DFSFileDao"></bean>
+	
+	<bean id="shareService" class="com.lk.service.ShareServiceImpl">
+		<property name="fileDao" ref="fileDao"></property>
+		<property name="userDao" ref="userDao"></property>
+		<property name="shareItemDao" ref="shareItemDao"></property>
+	</bean>
+	
+	<bean id= "shareItemDao" class="com.lk.dao.ShareItemDaoImpl"></bean>
+	
+	<bean id="socialAction" class="com.lk.action.SocialAction">
+		<property name="socialService" ref="socialService"></property>
+	</bean>
+	
+	<bean id="socialService" class="com.lk.service.SocialServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+		<property name="shareItemDao" ref="shareItemDao"></property>
+		<property name="discussDao" ref="discussDao"></property>
+		<property name="commentDao" ref="commentDao"></property>
+	</bean>
+	
+	<bean id="discussDao" class="com.lk.dao.DiscussDaoImpl"></bean>
+	<bean id="commentDao" class="com.lk.dao.CommentDaoImpl"></bean>
+
+</beans>  

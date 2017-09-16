@@ -1,0 +1,32 @@
+<?xml version="1.0"?>  
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="com.lk.bean.ShareItem" table="disk_share_item">
+
+		<id name="id">
+			<column name="id" />
+			<generator class="native" />
+		</id>
+
+		<property name="filename" type="string"></property>
+		<property name="filepath" type="string"></property>
+		<property name="discuss_count" type="int"></property>
+
+
+		<set name="discuss" lazy="false">
+			<key column="sid"></key>  <!-- 外键列名 -->
+			<one-to-many class="com.lk.bean.Discuss" />
+		</set>
+
+		<set name="comments" lazy="false">
+			<key column="sid"></key>  <!-- 外键列名 -->
+			<one-to-many class="com.lk.bean.Comment" />
+		</set>
+
+		<many-to-one name="user" class="com.lk.bean.User" column="uid"></many-to-one>
+	</class>
+	
+</hibernate-mapping>  
